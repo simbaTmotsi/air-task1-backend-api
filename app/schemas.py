@@ -1,7 +1,7 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import List, Optional
 
-# Customer schemas
+# Customer Schemas
 class CustomerBase(BaseModel):
     name: str
     surname: str
@@ -17,10 +17,9 @@ class CustomerUpdate(BaseModel):
 
 class Customer(CustomerBase):
     id: int
-    
-    model_config = {"from_attributes": True}
+    model_config = ConfigDict(from_attributes=True)
 
-# ShopItemCategory schemas
+# ShopItemCategory Schemas
 class ShopItemCategoryBase(BaseModel):
     title: str
     description: str
@@ -34,10 +33,9 @@ class ShopItemCategoryUpdate(BaseModel):
 
 class ShopItemCategory(ShopItemCategoryBase):
     id: int
-    
-    model_config = {"from_attributes": True}
+    model_config = ConfigDict(from_attributes=True)
 
-# ShopItem schemas  
+# ShopItem Schemas
 class ShopItemBase(BaseModel):
     title: str
     description: str
@@ -55,10 +53,9 @@ class ShopItemUpdate(BaseModel):
 class ShopItem(ShopItemBase):
     id: int
     categories: List[ShopItemCategory] = []
-    
-    model_config = {"from_attributes": True}
+    model_config = ConfigDict(from_attributes=True)
 
-# OrderItem schemas
+# OrderItem Schemas
 class OrderItemBase(BaseModel):
     shop_item_id: int
     quantity: int
@@ -66,13 +63,16 @@ class OrderItemBase(BaseModel):
 class OrderItemCreate(OrderItemBase):
     pass
 
+class OrderItemUpdate(BaseModel):
+    shop_item_id: Optional[int] = None
+    quantity: Optional[int] = None
+
 class OrderItem(OrderItemBase):
     id: int
     shop_item: ShopItem
-    
-    model_config = {"from_attributes": True}
+    model_config = ConfigDict(from_attributes=True)
 
-# Order schemas
+# Order Schemas
 class OrderBase(BaseModel):
     customer_id: int
 
@@ -87,5 +87,4 @@ class Order(OrderBase):
     id: int
     customer: Customer
     items: List[OrderItem] = []
-    
-    model_config = {"from_attributes": True}
+    model_config = ConfigDict(from_attributes=True)
